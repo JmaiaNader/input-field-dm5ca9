@@ -3,19 +3,18 @@
 
 <br>
 <br>
-<form [formGroup]="form2" (ngSubmit)="onSubmit2()"><select  multiple  formControlName="multiSelect">
-  <option selected>Open this select menu</option>
+<form [formGroup]="form2" (ngSubmit)="onSubmit2()">
+  <select  multiple  formControlName="multiSelect">
+  <option selected>Select Skills</option>
  <option  *ngFor="let skill of listSkills" [ngValue]="skill">{{skill}}</option>
 </select>
-<select    formControlName="formInput2">
-  <option selected>Select one Date</option>
+<select  multiple  formControlName="formInput2">
+  <option selected>Select  Date</option>
  <option  *ngFor="let skill of listDate" [ngValue]="skill">{{skill}}</option>
 </select>
-	<input id="input2" type="text"
-    formControlName="formInput3">
-	<br>
-	<input id="input2" type="text"
-    formControlName="formInput2">
+
+<br>
+
 
 	<button type="submit">Submit</button><br>
 
