@@ -16,6 +16,8 @@ export class AppComponent implements OnInit {
   keys: string[];
   public data: any;
   public dataByDate: any;
+  public listDate=[];
+   public listSkills=[];
    SumHundle:number =0;
    Sumcallsonhold=0;
    SumholdTime=0;
@@ -67,7 +69,7 @@ export class AppComponent implements OnInit {
 
   onSubmit2() {
     console.log(this.form2.value);
-    this.onParseFile();
+     this.onParseFile();
   }
 
   currencyValidator(): ValidatorFn {
@@ -88,6 +90,8 @@ export class AppComponent implements OnInit {
   }
 
   onParseFile(){
+
+    
     this.AverageAHT=0;
   this.AverageHoldTim=0;
     this.Sumcallsonhold=0;
@@ -97,18 +101,29 @@ export class AppComponent implements OnInit {
    this.sumhandleTime=0;
    this.dataByDate=[];
      this.data.forEach(element=>{
+
+       
             if(element.Date== this.form2.value.formInput2 )
             { 
-              element['Call Type Name']=null;
-            
-          // console.log(this.timestrToSec(element['handleTime']));
+             
+          // 
           
               this.dataByDate.push(element) }
           }
           );
-
+console.log(this.dataByDate);
 this.dataByDate.forEach(element=>{
   let str:string=element['Skill Group Name'];
+ 
+  for (var i = 0; i < this.form2.value.multiSelect.length; i++) {
+ if( str.toLowerCase().indexOf(this.form2.value.multiSelect[i] ) !== -1 ){
+ this.SumholdTime += Number(element['holdTime']);
+              this.SumHundle += Number(element['Handled Calls']);
+              this.sumhandleTime+= this.timestrToSec(element['handleTime']);
+               this.Sumcallsonhold+= Number((element['callsonhold']));
+  }
+}
+/*  
  if(this.form2.value.formInput3 =='mec'){
 if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 || str.toLowerCase().indexOf('mbt') !== -1 ){
  this.SumholdTime += Number(element['holdTime']);
@@ -126,7 +141,7 @@ if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 ){
                this.Sumcallsonhold+= Number((element['callsonhold']));
   }
    
- }
+ } */
 
   
 
@@ -144,6 +159,8 @@ if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 ){
          this.AverageHoldTim=this.SumholdTime/this.Sumcallsonhold;
   }
  onFileChange(ev) {
+   this.listSkills=[];
+    this.listDate=[];
    this.sumhandleTimeFormat='';
    this.SumHundle=0;
    this.SumholdTime=0;
@@ -169,7 +186,20 @@ if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 ){
           const dataString = JSON.stringify(jsonData);
           //document.getElementById('output').innerHTML = dataString.slice(0, 300).concat("...");
           this.data = jsonData.Sheet1;
-        //  console.log(this.data);
+        this.data.forEach(element=>{
+          if(element['Skill Group Name']){
+let skill:string=element['Skill Group Name'].toLowerCase().slice(0, 4);
+              element['Call Type Name']=null;
+            if(this.listDate.includes(element.Date)==false){
+               this.listDate.push(element.Date);
+            }
+            if(this.listSkills.includes(skill)==false){
+               this.listSkills.push(skill);
+            }
+
+          }
+             
+           });
         
 
         } 
