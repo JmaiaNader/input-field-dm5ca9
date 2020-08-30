@@ -19,6 +19,10 @@ export class AppComponent implements OnInit {
    SumHundle:number =0;
    Sumcallsonhold=0;
    SumholdTime=0;
+  AverageAHT=0;
+  AverageHoldTim=0;
+   
+
    sumhandleTime=0;
   dataSheet = new Subject();
   @ViewChild('inputFile') inputFile: ElementRef;
@@ -40,7 +44,8 @@ export class AppComponent implements OnInit {
 
     this.form2 = this.formBuilder.group({
       multiSelect: ['', Validators.required],
-      formInput2: ['', Validators.required]
+      formInput2: ['', Validators.required],
+      formInput3: ['', Validators.required],
     })
 
    // this.onChanges();
@@ -83,6 +88,8 @@ export class AppComponent implements OnInit {
   }
 
   onParseFile(){
+    this.AverageAHT=0;
+  this.AverageHoldTim=0;
     this.Sumcallsonhold=0;
      this.sumhandleTimeFormat='';
    this.SumHundle=0;
@@ -102,8 +109,8 @@ export class AppComponent implements OnInit {
 
 this.dataByDate.forEach(element=>{
   let str:string=element['Skill Group Name'];
- if(this.form2.value.multiSelect[0]=='mec'){
-if( str.toLowerCase().indexOf(this.form2.value.multiSelect[0]) !== -1 || str.toLowerCase().indexOf('mbt') !== -1 ){
+ if(this.form2.value.formInput3 =='mec'){
+if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 || str.toLowerCase().indexOf('mbt') !== -1 ){
  this.SumholdTime += Number(element['holdTime']);
               this.SumHundle += Number(element['Handled Calls']);
               this.sumhandleTime+= this.timestrToSec(element['handleTime']);
@@ -112,7 +119,7 @@ if( str.toLowerCase().indexOf(this.form2.value.multiSelect[0]) !== -1 || str.toL
 
  }
  else {
-if( str.toLowerCase().indexOf(this.form2.value.multiSelect[0]) !== -1 ){
+if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 ){
  this.SumholdTime += Number(element['holdTime']);
               this.SumHundle += Number(element['Handled Calls']);
               this.sumhandleTime+= this.timestrToSec(element['handleTime']);
@@ -129,7 +136,12 @@ if( str.toLowerCase().indexOf(this.form2.value.multiSelect[0]) !== -1 ){
           console.log('Sum Handled Calls  = '+this.SumHundle);
           console.log('Sum hold Time  = '+this.SumholdTime);
           console.log('Sum Handled Time  = '+this.formatTime(this.sumhandleTime) );
+          
+          
         this.sumhandleTimeFormat=this.formatTime(this.sumhandleTime);
+ console.log('this.sumhandleTime  = '+this.sumhandleTime);
+         this.AverageAHT=(this.sumhandleTime/86400)*86400/this.SumHundle;
+         this.AverageHoldTim=this.SumholdTime/this.Sumcallsonhold;
   }
  onFileChange(ev) {
    this.sumhandleTimeFormat='';
