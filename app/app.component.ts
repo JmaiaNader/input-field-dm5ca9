@@ -111,12 +111,12 @@ export class AppComponent implements OnInit {
               this.dataByDate.push(element) }
           }
           );
-console.log(this.dataByDate);
+
 this.dataByDate.forEach(element=>{
   let str:string=element['Skill Group Name'];
  
   for (var i = 0; i < this.form2.value.multiSelect.length; i++) {
- if( str.toLowerCase().indexOf(this.form2.value.multiSelect[i] ) !== -1 ){
+ if( str.toLowerCase().indexOf(this.form2.value.multiSelect[i].toLowerCase() ) !== -1 ){
  this.SumholdTime += Number(element['holdTime']);
               this.SumHundle += Number(element['Handled Calls']);
               this.sumhandleTime+= this.timestrToSec(element['handleTime']);
@@ -148,13 +148,10 @@ if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 ){
 
 });
 
-          console.log('Sum Handled Calls  = '+this.SumHundle);
-          console.log('Sum hold Time  = '+this.SumholdTime);
-          console.log('Sum Handled Time  = '+this.formatTime(this.sumhandleTime) );
           
           
         this.sumhandleTimeFormat=this.formatTime(this.sumhandleTime);
- console.log('this.sumhandleTime  = '+this.sumhandleTime);
+
          this.AverageAHT=Math.round((this.sumhandleTime)/this.SumHundle);
          this.AverageHoldTim=Math.round(this.SumholdTime/this.Sumcallsonhold)  ;
   }
@@ -188,7 +185,7 @@ if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 ){
           this.data = jsonData.Sheet1;
         this.data.forEach(element=>{
           if(element['Skill Group Name']){
-let skill:string=element['Skill Group Name'].toLowerCase().slice(0, 4);
+let skill:string=element['Skill Group Name'].slice(0, 4).replace("_", "");
               element['Call Type Name']=null;
             if(this.listDate.includes(element.Date)==false){
                this.listDate.push(element.Date);
