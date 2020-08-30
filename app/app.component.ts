@@ -155,7 +155,7 @@ if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 ){
           
         this.sumhandleTimeFormat=this.formatTime(this.sumhandleTime);
  console.log('this.sumhandleTime  = '+this.sumhandleTime);
-         this.AverageAHT=Math.round((this.sumhandleTime/86400)*86400/this.SumHundle);
+         this.AverageAHT=Math.round((this.sumhandleTime)/this.SumHundle);
          this.AverageHoldTim=Math.round(this.SumholdTime/this.Sumcallsonhold)  ;
   }
  onFileChange(ev) {
