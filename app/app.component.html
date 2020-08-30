@@ -1,26 +1,67 @@
+<button (click)="removeData()">Remove Data</button>
+<input type="file" (change)="onFileChange($event)" />
 
-   <button (click)="removeData()">Remove Data</button>
-  <input type="file" (change)="onFileChange($event)" />
- 
 <br>
 <br>
-<form [formGroup]="form2" (ngSubmit)="onSubmit2()">
- 
- 
-  <input id="input2" type="text" 
+<form [formGroup]="form2" (ngSubmit)="onSubmit2()"><select  multiple  formControlName="multiSelect">
+  <option selected>Open this select menu</option>
+ <option  *ngFor="let skill of listSkills" [ngValue]="skill">{{skill}}</option>
+</select>
+<select    formControlName="formInput2">
+  <option selected>Select one Date</option>
+ <option  *ngFor="let skill of listDate" [ngValue]="skill">{{skill}}</option>
+</select>
+	<input id="input2" type="text"
     formControlName="formInput3">
-<br>
-    <input id="input2" type="text" 
+	<br>
+	<input id="input2" type="text"
     formControlName="formInput2">
 
-  <button type="submit">Submit</button><br>
-Sum hold Time  =  <p style="color:red"> {{this.SumholdTime}}</p><br>
-Sum callsonhold  = <p style="color:red"> {{this.Sumcallsonhold}} </p><br>
-Sum Handled Time  = <p style="color:red">{{this.sumhandleTimeFormat}} </p><br>
-Sum Handled Calls = <p style="color:red"> {{this.SumHundle}} </p> <br>
+	<button type="submit">Submit</button><br>
 
-Average Hold Time = <p style="color:red"> {{this.AverageHoldTim}} </p><br>
-Average Hundle Time AHT =<p style="color:red"> {{this.AverageAHT}} </p> <br>
+	<table id="customers">
+		<th>
+			Sum hold Time
+		</th>
+		<th>
+			Sum callsonhold
+		</th>
+		<th>
+			Sum Handled Time
+		</th>
+		<th>
+			Sum Handled Calls
+		</th>
+		<th>
+			Average Hold Time
+		</th>
+		<th>
+			AHT
+		</th>
+		<tr>
+			<td>
+				<p style="color:red"> {{this.SumholdTime}}</p>
+			</td>
+			<td>
+				<p style="color:red"> {{this.Sumcallsonhold}}</p>
+			</td>
+			<td>
+				<p style="color:red">{{this.sumhandleTimeFormat}}</p>
+			</td>
+			<td>
+				<p style="color:red"> {{this.SumHundle}}</p>
+			</td>
+			<td>
+				<p style="color:red"> {{this.AverageHoldTim}}</p>
+			</td>
+			<td>
+				<p style="color:red"> {{this.AverageHoldTim}}</p>
+			</td>
+		</tr>
+
+
+	</table>
+
 
 
 </form>
