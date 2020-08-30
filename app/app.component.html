@@ -1,0 +1,25 @@
+<h1>This is a form</h1>
+   <button (click)="removeData()">Remove Data</button>
+  <input type="file" (change)="onFileChange($event)" />
+ 
+
+<form [formGroup]="form2" (ngSubmit)="onSubmit2()">
+ 
+  <select multiple formControlName="multiSelect">
+    <option value="sec">SEC</option>
+    <option value="mec">MEC</option>
+    <option value="qpost">QPOST</option>
+  </select>
+
+    <input id="input2" type="text" 
+    formControlName="formInput2">
+
+  <button type="submit">Submit</button>
+
+Sum Handled Calls = {{this.SumHundle}} <br>
+Sum hold Time  = {{this.SumholdTime}}<br>
+Sum Handled Time  ={{this.sumhandleTimeFormat}}<br>
+Sum callsonhold  ={{this.Sumcallsonhold}}<br>
+
+
+</form>
