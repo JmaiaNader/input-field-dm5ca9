@@ -3,7 +3,7 @@
 
 <br>
 <br>
-<form [formGroup]="form2" (ngSubmit)="onSubmit2()">
+<form [formGroup]="form2" >
   <select  multiple  formControlName="multiSelect">
   <option selected>Select Skills</option>
  <option  *ngFor="let skill of listSkills" [ngValue]="skill">{{skill}}</option>
@@ -12,11 +12,20 @@
   <option selected>Select  Date</option>
  <option  *ngFor="let skill of listDate" [ngValue]="skill">{{skill}}</option>
 </select>
+<select  multiple  formControlName="languages">
+  <option selected>Select  Languages</option>
+ <option  *ngFor="let skill of listlanguage" [ngValue]="skill">{{skill}}</option>
+</select>
+	<p style="color:red"> {{this.form2.value.languages}}</p>
 
 <br>
 
+<div style="text-align: right; ">
+  <button  (click)="exportTableToExcel('customers', 'members-data')">Export Table Data To Excel File</button>
+</div>
+	<button (click)="onSubmit2()">Submit</button>
 
-	<button type="submit">Submit</button><br>
+<br>
 
 	<table id="customers">
 		<th>
@@ -35,7 +44,7 @@
 			Average Hold Time
 		</th>
 		<th>
-			AHT
+			Average Handle Time AHT
 		</th>
 		<tr>
 			<td>
@@ -54,13 +63,28 @@
 				<p style="color:red"> {{this.AverageHoldTim}}</p>
 			</td>
 			<td>
-				<p style="color:red"> {{this.AverageHoldTim}}</p>
+				<p style="color:red"> {{this.AverageAHT}}</p>
 			</td>
 		</tr>
 
 
 	</table>
+<br>
 
+<button (click)="myFunction()">Filter</button>
+  <input type="text" id="myInput"  placeholder="Search for names.." title="Type in a name">
 
+<table id="customers2">
 
+ <th>
+		Result  {{listFinal.length}}
+		</th>
+<tr *ngFor="let item of listFinal">
+     <td>{{item}}</td>
+</tr>
+</table>
+
+<div style="text-align: right; ">
+ <button (click)="submitAfetFilter()">submit after Filter </button>
+</div>
 </form>
