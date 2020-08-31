@@ -116,32 +116,14 @@ this.dataByDate.forEach(element=>{
   let str:string=element['Skill Group Name'];
  
   for (var i = 0; i < this.form2.value.multiSelect.length; i++) {
- if( str.toLowerCase().indexOf(this.form2.value.multiSelect[i].toLowerCase() ) !== -1 ){
+ if( str.toLowerCase().startsWith(this.form2.value.multiSelect[i].toLowerCase() )  ){
  this.SumholdTime += Number(element['holdTime']);
               this.SumHundle += Number(element['Handled Calls']);
               this.sumhandleTime+= this.timestrToSec(element['handleTime']);
                this.Sumcallsonhold+= Number((element['callsonhold']));
   }
 }
-/*  
- if(this.form2.value.formInput3 =='mec'){
-if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 || str.toLowerCase().indexOf('mbt') !== -1 ){
- this.SumholdTime += Number(element['holdTime']);
-              this.SumHundle += Number(element['Handled Calls']);
-              this.sumhandleTime+= this.timestrToSec(element['handleTime']);
-               this.Sumcallsonhold+= Number((element['callsonhold']));
-  }
 
- }
- else {
-if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 ){
- this.SumholdTime += Number(element['holdTime']);
-              this.SumHundle += Number(element['Handled Calls']);
-              this.sumhandleTime+= this.timestrToSec(element['handleTime']);
-               this.Sumcallsonhold+= Number((element['callsonhold']));
-  }
-   
- } */
 
   
 
@@ -183,6 +165,7 @@ if( str.toLowerCase().indexOf(this.form2.value.formInput3 ) !== -1 ){
           const dataString = JSON.stringify(jsonData);
           //document.getElementById('output').innerHTML = dataString.slice(0, 300).concat("...");
           this.data = jsonData.Sheet1;
+
         this.data.forEach(element=>{
           if(element['Skill Group Name']){
 let skill:string=element['Skill Group Name'].slice(0, 4).replace("_", "");
@@ -232,4 +215,36 @@ timeStringToFloat(time) {
   var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1]) : 0;
   return hours + minutes / 60;
 }
+
+
+ public importFromFile(bstr: string): XLSX.AOA2SheetOpts {
+    /* read workbook */
+    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+    /* grab first sheet */
+    const wsname: string = wb.SheetNames[0];
+    const ws: XLSX.WorkSheet = wb.Sheets['Sheet1'];
+
+    /* save data */
+    const data = <XLSX.AOA2SheetOpts>(XLSX.utils.sheet_to_json(ws, { header: 1 }));
+
+    return data;
+  }
+ onFileChangetest(evt: any) {
+    const target: DataTransfer = <DataTransfer>(evt.target);
+    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+
+      const bstr: string = e.target.result;
+      const data = <any[]>this.importFromFile(bstr);
+
+    console.log(data);
+
+
+    };
+    reader.readAsBinaryString(target.files[0]);
+
+  }
 }
