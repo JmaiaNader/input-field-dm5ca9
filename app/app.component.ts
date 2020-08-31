@@ -17,6 +17,10 @@ export class AppComponent implements OnInit {
   public data: any;
   public dataByDate: any;
   public listDate=[];
+  public listFinal=[];
+   public listFiltred=[];
+   public listFiltred2=[];
+  public listlanguage=['AR','EN','HIN','FIL','TAG','MAL','HIN','FR'];
    public listSkills=[];
    SumHundle:number =0;
    Sumcallsonhold=0;
@@ -46,6 +50,7 @@ export class AppComponent implements OnInit {
 
     this.form2 = this.formBuilder.group({
       multiSelect: ['', Validators.required],
+      languages: ['', Validators.required],
       formInput2: ['', Validators.required],
       formInput3: ['', Validators.required],
     })
@@ -55,11 +60,11 @@ export class AppComponent implements OnInit {
 
   onChanges(): void {
     this.form.valueChanges.subscribe(value => {
-      console.log('form input value', value);
+     
     });
 
     this.form2.valueChanges.subscribe( value => {
-      console.log(value);
+     
     })
   }
 
@@ -68,8 +73,45 @@ export class AppComponent implements OnInit {
   }
 
   onSubmit2() {
-    console.log(this.form2.value);
      this.onParseFile();
+  }
+
+  submitAfetFilter(){
+  console.log('+++++++');
+  console.log(this.listFiltred);
+  this.listFiltred2=this.listFiltred;
+
+   console.log('+++++++');
+    this.AverageAHT=0;
+  this.AverageHoldTim=0;
+    this.Sumcallsonhold=0;
+     this.sumhandleTimeFormat='';
+   this.SumHundle=0;
+   this.SumholdTime=0;
+   this.sumhandleTime=0;
+this.dataByDate.forEach(element=>{
+  let str:string=element['Skill Group Name'];
+ 
+  for (var i = 0; i < this.listFiltred2.length; i++) {
+ if( (str.toLowerCase())==(this.listFiltred2[i].toLowerCase())  ){
+ 
+ this.SumholdTime += Number(element['holdTime']);
+              this.SumHundle += Number(element['Handled Calls']);
+              this.sumhandleTime+= this.timestrToSec(element['handleTime']);
+               this.Sumcallsonhold+= Number((element['callsonhold']));
+
+  }
+}
+
+});
+
+          
+          
+        this.sumhandleTimeFormat=this.formatTime(this.sumhandleTime);
+
+         this.AverageAHT=Math.round((this.sumhandleTime)/this.SumHundle);
+         this.AverageHoldTim=Math.round(this.SumholdTime/this.Sumcallsonhold)  ;
+
   }
 
   currencyValidator(): ValidatorFn {
@@ -87,11 +129,12 @@ export class AppComponent implements OnInit {
 
     removeData() {
    this.data=[];
+   this.listFinal=[];
   }
 
   onParseFile(){
-
-    
+    this.listFiltred=[]
+    this.listFinal=[];
     this.AverageAHT=0;
   this.AverageHoldTim=0;
     this.Sumcallsonhold=0;
@@ -117,10 +160,19 @@ this.dataByDate.forEach(element=>{
  
   for (var i = 0; i < this.form2.value.multiSelect.length; i++) {
  if( str.toLowerCase().startsWith(this.form2.value.multiSelect[i].toLowerCase() )  ){
+   for (var j = 0; j < this.form2.value.languages.length; j++) {
+if( str.toLowerCase().indexOf('_'+this.form2.value.languages[j].toLowerCase() )!== -1  ){
+
+  this.listFinal.push(str);
  this.SumholdTime += Number(element['holdTime']);
               this.SumHundle += Number(element['Handled Calls']);
               this.sumhandleTime+= this.timestrToSec(element['handleTime']);
                this.Sumcallsonhold+= Number((element['callsonhold']));
+
+}
+
+   }
+
   }
 }
 
@@ -207,7 +259,28 @@ let skill:string=element['Skill Group Name'].slice(0, 4).replace("_", "");
           this.pad(seconds%60),
           ].join(":");
 }
+  myFunction() {
+this.listFiltred=[];
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("customers2");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        this.listFiltred.push(txtValue);
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
 
+  
+}
 
 timeStringToFloat(time) {
   var hoursMinutes = time.split(/[.:]/);
@@ -240,11 +313,42 @@ timeStringToFloat(time) {
       const bstr: string = e.target.result;
       const data = <any[]>this.importFromFile(bstr);
 
-    console.log(data);
+  
 
 
     };
     reader.readAsBinaryString(target.files[0]);
 
   }
+exportTableToExcel(tableID, filename ){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    filename=this.form2.value.multiSelect[0]+'-Hold-Report';
+    // Specify file name listSkills[0]
+    filename = filename?filename+'.xls':'excel_data.xls';
+    
+    // Create download link element
+    downloadLink = document.createElement("a");
+    
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+}
+
 }
