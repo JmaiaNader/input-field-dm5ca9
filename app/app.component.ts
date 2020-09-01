@@ -77,8 +77,7 @@ export class AppComponent implements OnInit {
   }
 
   submitAfetFilter(){
-  console.log('+++++++');
-  console.log(this.listFiltred);
+ 
   this.listFiltred2=this.listFiltred;
 
    console.log('+++++++');
@@ -145,13 +144,16 @@ this.dataByDate.forEach(element=>{
    this.dataByDate=[];
      this.data.forEach(element=>{
 
-       
-            if(element.Date== this.form2.value.formInput2 )
+       for (var i = 0; i < this.form2.value.formInput2.length; i++) {
+            if(element.Date== this.form2.value.formInput2[i] )
             { 
              
           // 
           
               this.dataByDate.push(element) }
+
+       }
+            
           }
           );
 
@@ -325,7 +327,7 @@ exportTableToExcel(tableID, filename ){
     var dataType = 'application/vnd.ms-excel';
     var tableSelect = document.getElementById(tableID);
     var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-    filename=this.form2.value.multiSelect[0]+'-Hold-Report';
+    filename=this.form2.value.multiSelect[0]+'-Hold-Report-'+this.listDate[0];
     // Specify file name listSkills[0]
     filename = filename?filename+'.xls':'excel_data.xls';
     
