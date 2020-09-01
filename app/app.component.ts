@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   public listFinal=[];
    public listFiltred=[];
    public listFiltred2=[];
-  public listlanguage=['AR','EN','HIN','FIL','TAG','MAL','HIN','FR'];
+  public listlanguage=['AR','EN','HIN','FIL','TAG','MAL','SP','FR','NAP'];
    public listSkills=[];
    SumHundle:number =0;
    Sumcallsonhold=0;
@@ -261,18 +261,28 @@ let skill:string=element['Skill Group Name'].slice(0, 4).replace("_", "");
           this.pad(seconds%60),
           ].join(":");
 }
-  myFunction() {
+
+ values = '';
+
+  onKeyUpEvent(event: any) { // without type info
+    this.values = event.target.value;
+
+    console.log(this.values);
+   
+  }
+  myFunction(event: any) {
 this.listFiltred=[];
   var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
+ // input = document.getElementById("myInput");
+  //filter = input.value.toUpperCase();
+  filter=event.target.value;
   table = document.getElementById("customers2");
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
     td = tr[i].getElementsByTagName("td")[0];
     if (td) {
       txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      if (txtValue.toUpperCase().indexOf(filter.toUpperCase()) > -1) {
         this.listFiltred.push(txtValue);
         tr[i].style.display = "";
       } else {
