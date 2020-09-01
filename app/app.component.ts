@@ -19,8 +19,8 @@ export class AppComponent implements OnInit {
   public listDate=[];
   public listFinal=[];
    public listFiltred=[];
-   public listFiltred2=[];
-  public listlanguage=['AR','EN','HIN','FIL','TAG','MAL','SP','FR','NAP'];
+   //public listFiltred2=[];
+  public listlanguage=['AR','EN','HIN','FIL','TAG','MAL','SP','FR','NEP'];
    public listSkills=[];
    SumHundle:number =0;
    Sumcallsonhold=0;
@@ -68,19 +68,13 @@ export class AppComponent implements OnInit {
     })
   }
 
-  onSubmit() {
-    console.log(this.form.value);
-  }
-
+ 
   onSubmit2() {
      this.onParseFile();
   }
 
   submitAfetFilter(){
  
-  this.listFiltred2=this.listFiltred;
-
-   console.log('+++++++');
     this.AverageAHT=0;
   this.AverageHoldTim=0;
     this.Sumcallsonhold=0;
@@ -88,21 +82,20 @@ export class AppComponent implements OnInit {
    this.SumHundle=0;
    this.SumholdTime=0;
    this.sumhandleTime=0;
-this.dataByDate.forEach(element=>{
+
+   for (var k = 0; k < this.dataByDate.length; k++) {
+     let element=this.dataByDate[k];
   let str:string=element['Skill Group Name'];
- 
-  for (var i = 0; i < this.listFiltred2.length; i++) {
- if( (str.toLowerCase())==(this.listFiltred2[i].toLowerCase())  ){
- 
- this.SumholdTime += Number(element['holdTime']);
+ if(this.listFiltred.includes(str)==true){
+
+              this.SumholdTime += Number(element['holdTime']);
               this.SumHundle += Number(element['Handled Calls']);
               this.sumhandleTime+= this.timestrToSec(element['handleTime']);
-               this.Sumcallsonhold+= Number((element['callsonhold']));
+              this.Sumcallsonhold+= Number((element['callsonhold']));
+    }
+ 
 
-  }
-}
-
-});
+};
 
           
           
@@ -142,8 +135,10 @@ this.dataByDate.forEach(element=>{
    this.SumholdTime=0;
    this.sumhandleTime=0;
    this.dataByDate=[];
-     this.data.forEach(element=>{
-
+  //   this.data.forEach(element=>{
+    
+for (var k = 0; k < this.data.length; k++) {
+  let element=this.data[k];
        for (var i = 0; i < this.form2.value.formInput2.length; i++) {
             if(element.Date== this.form2.value.formInput2[i] )
             { 
@@ -155,9 +150,10 @@ this.dataByDate.forEach(element=>{
        }
             
           }
-          );
+          
 
-this.dataByDate.forEach(element=>{
+for (var k = 0; k < this.dataByDate.length; k++) {
+     let element=this.dataByDate[k];
   let str:string=element['Skill Group Name'];
  
   for (var i = 0; i < this.form2.value.multiSelect.length; i++) {
@@ -182,9 +178,9 @@ if( str.toLowerCase().indexOf('_'+this.form2.value.languages[j].toLowerCase() )!
   
 
 
-});
+};
 
-          
+        
           
         this.sumhandleTimeFormat=this.formatTime(this.sumhandleTime);
 
@@ -192,6 +188,7 @@ if( str.toLowerCase().indexOf('_'+this.form2.value.languages[j].toLowerCase() )!
          this.AverageHoldTim=Math.round(this.SumholdTime/this.Sumcallsonhold)  ;
   }
  onFileChange(ev) {
+   this.listFiltred=[];
    this.listSkills=[];
     this.listDate=[];
    this.sumhandleTimeFormat='';
@@ -203,6 +200,7 @@ if( str.toLowerCase().indexOf('_'+this.form2.value.languages[j].toLowerCase() )!
     this.data=[];
         let workBook = null;
         let jsonData = null;
+        
         const reader = new FileReader();
         const file = ev.target.files[0];
         reader.onload = (event) => {
@@ -222,7 +220,8 @@ if( str.toLowerCase().indexOf('_'+this.form2.value.languages[j].toLowerCase() )!
 
         this.data.forEach(element=>{
           if(element['Skill Group Name']){
-let skill:string=element['Skill Group Name'].slice(0, 4).replace("_", "");
+        let    res = element['Skill Group Name'].split("_");
+let skill:string=res[0];
               element['Call Type Name']=null;
             if(this.listDate.includes(element.Date)==false){
                this.listDate.push(element.Date);
@@ -262,14 +261,8 @@ let skill:string=element['Skill Group Name'].slice(0, 4).replace("_", "");
           ].join(":");
 }
 
- values = '';
 
-  onKeyUpEvent(event: any) { // without type info
-    this.values = event.target.value;
-
-    console.log(this.values);
-   
-  }
+ 
   myFunction(event: any) {
 this.listFiltred=[];
   var input, filter, table, tr, td, i, txtValue;
