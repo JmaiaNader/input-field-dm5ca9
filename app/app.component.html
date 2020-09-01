@@ -73,18 +73,18 @@
 
 
   <input type="text" id="myInput"  (keyup)="myFunction($event)"placeholder="Search for Skills.." title="Type in a name">
-
+<div style="text-align: right; ">
+ <button (click)="submitAfetFilter()">submit after Filter </button>
+</div>
 <table id="customers2">
 
  <th>
-		Result  {{listFinal.length}}
+		Result  {{listFinal.length}} filtred {{listFiltred.length}}
 		</th>
 <tr *ngFor="let item of listFinal">
      <td>{{item}}</td>
 </tr>
 </table>
 
-<div style="text-align: right; ">
- <button (click)="submitAfetFilter()">submit after Filter </button>
-</div>
+
 </form>
